@@ -23,7 +23,7 @@ jobs:
       matrix:
         include:
         - language: c-cpp
-          build-mode: manual # تم تغيير هذه القيمة إلى manual
+          build-mode: manual
         - language: python
           build-mode: none
           
@@ -31,7 +31,6 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
 
-    # خطوة جديدة: تثبيت الأدوات اللازمة لعملية البناء لمشروع libuv
     - name: Install build dependencies
       if: matrix.language == 'c-cpp'
       run: sudo apt-get update && sudo apt-get install -y autoconf automake libtool make gcc
@@ -41,8 +40,9 @@ jobs:
       with:
         languages: ${{ matrix.language }}
         build-mode: ${{ matrix.build-mode }}
+        # تفعيل حزم الفحص العميقة والشاملة للثغرات وجودة الكود
+        queries: security-extended,security-and-quality
 
-    # تم وضع أوامر بناء المشروع هنا
     - name: Run manual build steps
       if: matrix.build-mode == 'manual'
       shell: bash
